@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class ParentsController extends Controller
 {
@@ -13,7 +15,8 @@ class ParentsController extends Controller
      */
     public function index()
     {
-        return view('parents.index');
+        $parents = User::where('role', 'Parent')->latest()->get();
+        return view('parents.index', compact('parents'));
     }
 
     /**
@@ -23,7 +26,8 @@ class ParentsController extends Controller
      */
     public function create()
     {
-        return view('parents.create');
+        $students = User::where('role', 'Student')->get();
+        return view('parents.create', compact('students'));
     }
 
     /**
@@ -34,7 +38,15 @@ class ParentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create(array_merge($request->all(),
+    [
+        'password' => Hash::make($request->national_id),
+        'role' => 'Parent' 
+    ]));
+
+    //asssign role
+    $user->assignRole('Parent');
+    return back()->with('message','Parent created successfully!');
     }
 
     /**

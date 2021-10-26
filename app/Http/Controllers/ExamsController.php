@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\School;
+use App\Models\Academic_year;
+use App\Models\Exam;
 
 class ExamsController extends Controller
 {
@@ -13,7 +16,9 @@ class ExamsController extends Controller
      */
     public function index()
     {
-        return view('exams.index');
+        $exams = Exam::with(['schools', 'years', 'semesters'])->latest()->get();
+        //dd($exams);
+        return view('exams.index', compact('exams'));
     }
 
     /**
@@ -23,7 +28,9 @@ class ExamsController extends Controller
      */
     public function create()
     {
-        return view('exams.create');
+        $schools = School::all();
+        $years = Academic_year::all();
+        return view('exams.create', compact('schools','years'));
     }
 
     /**
@@ -34,7 +41,8 @@ class ExamsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Exam::create(array_merge($request->all()));
+        return back()->with('message', 'Exam created successfully!');
     }
 
     /**
@@ -68,7 +76,8 @@ class ExamsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Exam::findOrFail($id)->update(['status' => $request->status]);
+        return back();
     }
 
     /**
