@@ -36,16 +36,19 @@
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            @php($count = 1)
+                           @foreach ($students as $student)
+                           <tr>
+                            <td>{{ $count++ }}</td>
+                            <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                            <td>{{ $student->email }}</td>
+                            <td>{{ $student->phone }}</td>
+                            <td>{{ $student->school }}</td>
+                            <td>{{ $student->department }}</td>
+                            <td>{{ $student->course }}</td>
+                            <td></td>
+                        </tr>
+                           @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -14,7 +14,8 @@
                         </ul>
                     </div>
                     <div class="col-auto float-right ml-auto">
-                        <a href="{{ route('students.index') }}" class="btn add-btn"><i class="fa fa-plus"></i> All Students</a>
+                        <a href="{{ route('students.index') }}" class="btn add-btn"><i class="fa fa-plus"></i> All
+                            Students</a>
                     </div>
                 </div>
             </div>
@@ -24,59 +25,82 @@
                     <h2 class="card-title">Add Student</h2>
                 </div>
                 <div class="card-body">
-                    <form action="">
+                    @if (session('message'))
+                        <div class="alert alert-success">
+                            <a href="javascript:void(0)" data-dismiss="alert" class="close">&times;</a>
+                            <p>{{ session('message') }}</p>
+                        </div>
+                    @endif
+                    <form action="{{ route('students.store') }}" method="POST">
+                        @csrf
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">First Name</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="first_name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Last Name</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="last_name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Email</label>
-                                    <input type="text" class="form-control">
+                                    <input type="email" name="email" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Phone</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="phone" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">National ID</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="national_id" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">School</label>
-                                    <input type="text" class="form-control">
+                                    <select name="school_id" id="" class="form-control" required>
+                                        <option value="" selected disabled>Select</option>
+                                        @foreach ($schools as $item)
+                                            <option value="{{ $item->id }}">{{ $item->school }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Department</label>
-                                    <input type="text" class="form-control">
+                                    <select name="department_id" id="" class="form-control" required>
+                                        <option value="" selected disabled>Select</option>
+                                        @foreach ($departments as $item)
+                                            <option value="{{ $item->id }}">{{ $item->department }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Course</label>
-                                    <input type="text" class="form-control">
+                                    <select name="course_id" id="" class="form-control" required>
+                                        <option value="" selected disabled>Select</option>
+                                        @foreach ($courses as $item)
+                                            <option value="{{ $item->id }}">{{ $item->course }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+                            
                             <div class="col-md-12">
                                 <div class="form-group">
-                                   <button class="btn btn-primary pull-right">Submit</button>
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
                             </div>
                         </div>

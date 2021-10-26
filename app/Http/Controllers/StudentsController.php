@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\School;
+use App\Models\Department;
+use Spatie\Permission\Models\Role;
+use App\Models\Course;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class StudentsController extends Controller
 {
@@ -13,7 +19,16 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        return view('students.index');
+        $schools = School::all();
+        $departments = Department::all();
+        $courses = Course::all();
+        $students = User::where('users.role', 'Student')
+        ->join('schools', 'schools.id', '=', 'users.school_id')
+        ->join('departments', 'departments.id', '=', 'users.department_id')
+        ->join('courses', 'courses.id', '=', 'users.course_id')
+        ->get(['*', 'users.id as student_id']);
+        
+        return view('students.index', compact('schools','departments','courses','students'));
     }
 
     /**
@@ -23,7 +38,11 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        return view('students.create');
+        $schools = School::all();
+        $departments = Department::all();
+        $courses = Course::all();
+        $roles = Role::all();
+        return view('students.create', compact('schools','departments','courses', 'roles'));
     }
 
     /**
@@ -34,7 +53,15 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create(array_merge($request->all(),
+    [
+        'password' => Hash::make($request->national_id),
+        'role' => 'Student' 
+    ]));
+
+    //asssign role
+    $user->assignRole('Student');
+    return back()->with('message','Student created successfully!');
     }
 
     /**
