@@ -16,3 +16,14 @@ function getSemester(id) {
             console.log(error);
         })
 }
+
+//send result
+function sendResult(id){
+    axios.post('/push/result/' + id)
+    .then((response)=>{
+        $("#message").css("display","block");
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+}
